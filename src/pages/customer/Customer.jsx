@@ -10,7 +10,7 @@ const Customer = () => {
       <div className="homeContainer">
         <Navbar />
         <div></div>
-        <Datatable />
+        {/* <Datatable /> */}
       </div>
     </div>
   );
