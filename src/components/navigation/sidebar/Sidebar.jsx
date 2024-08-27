@@ -13,22 +13,22 @@ import PaymentIcon from "@mui/icons-material/Payment";
 // import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 // import LogoutIcon from "@mui/icons-material/Logout";
 
-const Sidebar = () => {
+function Sidebar() {
   return (
     <div className="sidebar">
       <div className="top">
         <Link to="/" style={{ textDecoration: "none" }}>
-          <span className="logo">Logo Pejuang Stack</span>
+          <span className="logo">Kelola Biz</span>
         </Link>
       </div>
       <hr />
       <div className="center">
         <ul>
-          <p className="title">MAIN</p>
+          {/* <p className="title">MAIN</p>
           <li>
             <DashboardIcon className="icon" />
             <span> Dashboard</span>
-          </li>
+          </li> */}
           <p className="title">LISTS</p>
           <Link to="/products" style={{ textDecoration: "none" }}>
             <li>
@@ -36,7 +36,7 @@ const Sidebar = () => {
               <span> Product</span>
             </li>
           </Link>
-          <Link to="/customer" style={{ textDecoration: "none" }}>
+          {/* <Link to="/customer" style={{ textDecoration: "none" }}>
             <li>
               <StoreIcon className="icon" />
               <span> Customer</span>
@@ -45,7 +45,7 @@ const Sidebar = () => {
           <li>
             <PaymentIcon className="icon" />
             <span> Transaksi</span>
-          </li>
+          </li> */}
           {/* <li>
             <LocalShippingIcon className="icon" />
             <span> Delivery</span>
@@ -84,10 +84,10 @@ const Sidebar = () => {
           </li> */}
         </ul>
       </div>
-      <div className="buttom">
+      {/* <div className="buttom">
         <div className="colorOption"></div>
         <div className="colorOption"></div>
-      </div>
+      </div> */}
     </div>
   );
 };

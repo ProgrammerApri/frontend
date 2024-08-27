@@ -8,7 +8,7 @@ import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import FormatListBulletedOutlinedIcon from "@mui/icons-material/FormatListBulletedOutlined";
 import { Avatar } from "@mui/material";
 
-const Navbar = () => {
+function Navbar() {
   return (
     <div className="navbar">
       <div className="wrapper">
@@ -48,6 +48,6 @@ const Navbar = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Navbar;

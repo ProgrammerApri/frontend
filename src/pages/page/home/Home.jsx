@@ -1,6 +1,6 @@
-import Navbar from "../../components/navbar/Navbar";
-import Sidebar from "../../components/sidebar/Sidebar";
-import List from "../list/List";
+import Navbar from "../../../components/navigation/navbar/Navbar";
+import Sidebar from "../../../components/navigation/sidebar/Sidebar";
+// import List from "../list/List";
 import "./home.scss";
 
 const Home = () => {
@@ -9,7 +9,6 @@ const Home = () => {
       <Sidebar />
       <div className="homeContainer">
         <Navbar />
-        {/* <List /> */}
       </div>
     </div>
   );

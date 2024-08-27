@@ -1,6 +1,6 @@
-import Navbar from "../../components/navbar/Navbar";
-import Sidebar from "../../components/sidebar/Sidebar";
-import Datatable from "../list/Datatable";
+import Navbar from "../../../components/navigation/navbar/Navbar";
+import Sidebar from "../../../components/navigation/sidebar/Sidebar";
+// import Datatable from "../list/Datatable";
 import "./customer.scss";
 
 const Customer = () => {
