@@ -22,6 +22,7 @@ export default function FormProduct({ product }) {
   });
 
   const [successMessage, setSuccessMessage] = useState(""); // State for success message
+  const [errorMessage, setErrorMessage] = useState(""); // State for error message
   const navigate = useNavigate(); // Initialize the navigate function
 
   useEffect(() => {
@@ -66,15 +67,31 @@ export default function FormProduct({ product }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    // Clear error message when user starts typing
+    if (name === "title" && value) {
+      setErrorMessage("");
+    }
   };
 
   const submitData = (e) => {
     e.preventDefault();
+    
+    // Validation: Check if title is empty
+    if (!formData.title) {
+      setErrorMessage("Nama Product tidak boleh kosong.");
+      return; // Prevent form submission
+    }
+
     console.log(formData);
     axios
       .post("https://dummyjson.com/products/add", formData)
       .then(({ data }) => {
+        setSuccessMessage("Product berhasil ditambahkan!");
+        setErrorMessage(""); // Clear error message on success
         navigate("/products");
+      })
+      .catch((error) => {
+        setErrorMessage("Terjadi kesalahan saat menambahkan produk.");
       });
   };
 
@@ -85,6 +102,13 @@ export default function FormProduct({ product }) {
           className="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg"
           role="alert">
           {successMessage}
+        </div>
+      )}
+      {errorMessage && (
+        <div
+          className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
+          role="alert">
+          {errorMessage}
         </div>
       )}
       <div className="flex flex-col md:flex-row md:gap-x-2 gap-y-2">

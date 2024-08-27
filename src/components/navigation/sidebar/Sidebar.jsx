@@ -18,7 +18,7 @@ function Sidebar() {
     <div className="sidebar">
       <div className="top">
         <Link to="/" style={{ textDecoration: "none" }}>
-          <span className="logo">Kelola Biz</span>
+          <span className="logo">Kelola.Biz</span>
         </Link>
       </div>
       <hr />
@@ -29,7 +29,7 @@ function Sidebar() {
             <DashboardIcon className="icon" />
             <span> Dashboard</span>
           </li> */}
-          <p className="title">LISTS</p>
+          <p className="title">MAIN</p>
           <Link to="/products" style={{ textDecoration: "none" }}>
             <li>
               <PersonIcon className="icon" />

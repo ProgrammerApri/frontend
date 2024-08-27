@@ -17,7 +17,7 @@ const Footer = () => {
       }}
     >
       <Typography variant="body2" color="textSecondary" sx={{ mb: { xs: 1, sm: 0 } }}>
-        <h1>© 2024 Kelola Biz</h1>. Apriyana Prasetio Putra.
+        <h1>© 2024 Kelola.Biz</h1>. Apriyana Prasetio Putra.
       </Typography>
       
     </Box>
