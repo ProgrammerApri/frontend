@@ -1,8 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import {
-  MaterialReactTable,
-  useMaterialReactTable,
-} from "material-react-table";
+import { MaterialReactTable, useMaterialReactTable } from "material-react-table";
 import axios from "axios";
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import AddProductForm from "../../components/formAddProduct/addProduct";
@@ -58,14 +55,16 @@ const Example = () => {
               variant="contained"
               color="primary"
               size="small" // Ukuran tombol kecil
-              onClick={() => handleEdit(row.original.id)}>
+              onClick={() => handleEdit(row.original.id)}
+            >
               Edit
             </Button>
             <Button
               variant="contained"
               color="secondary"
               size="small" // Ukuran tombol kecil
-              onClick={() => handleDelete(row.original)}>
+              onClick={() => handleDelete(row.original)}
+            >
               Delete
             </Button>
           </div>
@@ -80,9 +79,7 @@ const Example = () => {
   const [limit, setLimit] = useState(10);
 
   const getProducts = () => {
-    const url = searchQuery
-          ? `https://dummyjson.com/products/search?q=${searchQuery}`
-          : `https://dummyjson.com/product`;
+    const url = searchQuery ? `https://dummyjson.com/products/search?q=${searchQuery}` : `https://dummyjson.com/product`;
     axios.get(url).then(({ data }) => {
       const formatData = data.products.map((d) => {
         return {
@@ -103,11 +100,10 @@ const Example = () => {
 
   useEffect(() => {
     getProducts();
-    
   }, [searchQuery]);
 
   const handleEdit = (product) => {
-    navigate(`/product/${product}/edit`);
+    navigate(`/produk-edit/${product}/edit`);
   };
 
   const handleDelete = (productId) => {
@@ -120,9 +116,7 @@ const Example = () => {
           console.log("Product deleted:", data);
 
           // Update the state to remove the deleted product from the list
-          setProducts((prevProducts) =>
-            prevProducts.filter((product) => product.id !== productId)
-          );
+          setProducts((prevProducts) => prevProducts.filter((product) => product.id !== productId));
         })
         .catch((error) => {
           console.error("Error deleting product:", error);
@@ -144,11 +138,7 @@ const Example = () => {
 
   return (
     <Container>
-      <Box
-        my={2}
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center">
+      <Box my={2} display="flex" justifyContent="space-between" alignItems="center">
         <TextField
           label="Search Products"
           variant="outlined"

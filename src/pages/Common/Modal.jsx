@@ -1,59 +1,39 @@
-import { Fragment } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
 
-export default function Modal({
-  children,
-  show = false,
-  maxWidth = "lg",
-  closeable = true,
-  onClose = () => {},
-}) {
-  const close = () => {
-    if (closeable) {
-      onClose();
-    }
-  };
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
-  const maxWidthClass = {
-    sm: "sm:max-w-sm",
-    md: "sm:max-w-md",
-    lg: "sm:max-w-lg",
-    xl: "sm:max-w-xl",
-    "2xl": "sm:max-w-2xl",
-  }[maxWidth];
+export default function BasicModal() {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   return (
-    <Transition show={show} as={Fragment} leave="duration-200">
-      <Dialog
-        as="div"
-        id="modal"
-        className="fixed inset-0 flex overflow-y-auto px-4 py-6 sm:px-0 items-center z-[61] transform transition-all"
-        onClose={close}>
-        <Transition.Child
-          as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0">
-          <div className="absolute inset-0 bg-gray-500/75 dark:bg-slate-700/75" />
-        </Transition.Child>
-
-        <Transition.Child
-          as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-          enterTo="opacity-100 translate-y-0 sm:scale-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-          leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-          <Dialog.Panel
-            className={`mb-6 bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:mx-auto ${maxWidthClass}`}>
-            {children}
-          </Dialog.Panel>
-        </Transition.Child>
-      </Dialog>
-    </Transition>
+    <div>
+      <Button onClick={handleOpen}>Open modal</Button>
+      <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Text in a modal
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+          </Typography>
+        </Box>
+      </Modal>
+    </div>
   );
 }

@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Box, Button, TextField, Select, MenuItem, InputLabel, FormControl, Alert } from "@mui/material";
 
 export default function FormProduct({ product }) {
   const [formData, setFormData] = useState({
@@ -21,45 +22,28 @@ export default function FormProduct({ product }) {
     minimumOrderQuantity: "",
   });
 
-  const [successMessage, setSuccessMessage] = useState(""); // State for success message
-  const [errorMessage, setErrorMessage] = useState(""); // State for error message
-  const navigate = useNavigate(); // Initialize the navigate function
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (product) {
-      const {
-        id,
-        title,
-        category,
-        price,
-        discountPercentage,
-        stock,
-        tags,
-        brand,
-        sku,
-        weight,
-        warrantyInformation,
-        shippingInformation,
-        availabilityStatus,
-        returnPolicy,
-        minimumOrderQuantity,
-      } = product;
       setFormData({
-        id,
-        title,
-        category,
-        price,
-        discountPercentage,
-        stock,
-        tags,
-        brand,
-        sku,
-        weight,
-        warrantyInformation,
-        shippingInformation,
-        availabilityStatus,
-        returnPolicy,
-        minimumOrderQuantity,
+        id: product.id || "",
+        title: product.title || "",
+        category: product.category || "",
+        price: product.price || "",
+        discountPercentage: product.discountPercentage || "",
+        stock: product.stock || "",
+        tags: product.tags || "",
+        brand: product.brand || "",
+        sku: product.sku || "",
+        weight: product.weight || "",
+        warrantyInformation: product.warrantyInformation || "",
+        shippingInformation: product.shippingInformation || "",
+        availabilityStatus: product.availabilityStatus || "",
+        returnPolicy: product.returnPolicy || "",
+        minimumOrderQuantity: product.minimumOrderQuantity || "",
       });
     }
   }, [product]);
@@ -67,185 +51,129 @@ export default function FormProduct({ product }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
     // Clear error message when user starts typing
     if (name === "title" && value) {
       setErrorMessage("");
     }
   };
 
-  const submitData = (e) => {
+  const submitData = async (e) => {
     e.preventDefault();
-    
+
     // Validation: Check if title is empty
     if (!formData.title) {
       setErrorMessage("Nama Product tidak boleh kosong.");
-      return; // Prevent form submission
+      return;
     }
 
-    console.log(formData);
-    axios
-      .post("https://dummyjson.com/products/add", formData)
-      .then(({ data }) => {
+    try {
+      // Check if formData.id exists to decide between POST or PUT
+      if (formData.id) {
+        // Use PUT method to update the product
+        const { data } = await axios.put(`https://dummyjson.com/products/${formData.id}`, formData);
+        console.log("Product updated: ", data);
+        setSuccessMessage("Product berhasil diupdate!");
+      } else {
+        // Use POST method to add a new product
+        const { data } = await axios.post("https://dummyjson.com/products/add", formData);
+        console.log("New product added: ", data);
         setSuccessMessage("Product berhasil ditambahkan!");
-        setErrorMessage(""); // Clear error message on success
+      }
+
+      setErrorMessage("");
+
+      // Delay navigation for 2 seconds to show success message
+      setTimeout(() => {
         navigate("/products");
-      })
-      .catch((error) => {
-        setErrorMessage("Terjadi kesalahan saat menambahkan produk.");
-      });
+      }, 2000);
+    } catch (error) {
+      setErrorMessage("Terjadi kesalahan saat menambahkan atau memperbarui produk.");
+    }
   };
 
   return (
-    <form className="lg:w-8/12 flex flex-col gap-y-2" onSubmit={submitData}>
+    <Box component="form" sx={{ width: { lg: "66%" }, display: "flex", flexDirection: "column", gap: 2, ml: { xs: 1, md: 2 } }} onSubmit={submitData}>
       {successMessage && (
-        <div
-          className="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg"
-          role="alert">
+        <Alert severity="success" sx={{ mb: 2 }}>
           {successMessage}
-        </div>
+        </Alert>
       )}
       {errorMessage && (
-        <div
-          className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
-          role="alert">
+        <Alert severity="error" sx={{ mb: 2 }}>
           {errorMessage}
-        </div>
+        </Alert>
       )}
-      <div className="flex flex-col md:flex-row md:gap-x-2 gap-y-2">
-        <div className="w-full">
-          <div className="flex justify-between items-center">
-            <label
-              htmlFor="sku-input"
-              className="block text-sm font-medium mb-2 dark:text-white">
-              SKU
-            </label>
-          </div>
-          <input
-            type="text"
-            id="sku-input"
-            onChange={handleChange}
-            value={formData.sku}
-            name="sku"
-            className="py-3 px-4 block w-full border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
-            placeholder="RCH45Q1A"
-          />
-        </div>
-      </div>
-      <div className="flex flex-col md:flex-row md:gap-x-2 gap-y-2">
-        <div className="w-full">
-          <div className="flex justify-between items-center">
-            <label
-              htmlFor="title-input"
-              className="block text-sm font-medium mb-2 dark:text-white">
-              Nama Product
-            </label>
-          </div>
-          <input
-            type="text"
-            id="title-input"
-            onChange={handleChange}
-            value={formData.title}
-            name="title"
-            className="py-3 px-4 block w-full border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
-            placeholder="Product Name"
-          />
-        </div>
-        <div className="w-full">
-          <div className="flex justify-between items-center">
-            <label
-              htmlFor="brand-input"
-              className="block text-sm font-medium mb-2 dark:text-white">
-              Brand
-            </label>
-          </div>
-          <input
-            type="text"
-            id="brand-input"
-            onChange={handleChange}
-            value={formData.brand}
-            name="brand"
-            className="py-3 px-4 block w-full border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
-            placeholder="Brand Name"
-          />
-        </div>
-      </div>
-      <div className="flex flex-col md:flex-row md:gap-x-2 gap-y-2">
-        <div className="w-full">
-          <div className="flex justify-between items-center">
-            <label
-              htmlFor="stock-input"
-              className="block text-sm font-medium mb-2 dark:text-white">
-              Stock
-            </label>
-          </div>
-          <input
-            type="number"
-            id="stock-input"
-            onChange={handleChange}
-            value={formData.stock}
-            name="stock"
-            className="py-3 px-4 block w-full border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
-            placeholder="0"
-            min="0"
-          />
-        </div>
-      </div>
-      <div className="flex flex-col md:flex-row md:gap-x-2 gap-y-2">
-        <div className="w-full">
-          <div className="flex justify-between items-center">
-            <label
-              htmlFor="category-input"
-              className="block text-sm font-medium mb-2 dark:text-white">
-              Category
-            </label>
-          </div>
-          <select
-            id="category-input"
-            onChange={handleChange}
-            value={formData.category}
-            name="category"
-            className="py-3 px-4 pr-9 block w-full border-gray-200 bg-white rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400">
-            <option value="beauty">Beauty</option>
-            <option value="fragrances">Fragrances</option>
-            <option value="furniture">Furniture</option>
-            <option value="groceries">Groceries</option>
-          </select>
-        </div>
-        <div className="w-full">
-          <div className="flex justify-between items-center">
-            <label
-              htmlFor="price-input"
-              className="block text-sm font-medium mb-2 dark:text-white">
-              Price
-            </label>
-          </div>
-          <input
-            type="number"
-            id="price-input"
-            onChange={handleChange}
-            value={formData.price}
-            name="price"
-            className="py-3 px-4 block w-full border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
-            placeholder="Enter price"
-            min="0"
-            step="0.01"
-          />
-        </div>
-      </div>
-      <div className="flex justify-end mt-10 gap-x-4">
-        <Link
-          to="/products"
-          className="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold text-blue-500 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm">
-          Cancel
-        </Link>
 
-        <button
-          onClick={(e) => submitData(e)}
-          type="submit"
-          className="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">
-          {formData.id ? "Update Product" : "New Product"}
-        </button>
-      </div>
-    </form>
+      {/* SKU Input */}
+      <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: 2 }}>
+        <Box sx={{ width: "100%" }}>
+          <InputLabel htmlFor="sku-input" sx={{ fontWeight: "bold" }}>
+            SKU
+          </InputLabel>
+          <TextField id="sku-input" name="sku" value={formData.sku} onChange={handleChange} placeholder="RCH45Q1A" fullWidth variant="outlined" />
+        </Box>
+      </Box>
+
+      {/* Product Name & Brand */}
+      <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: 2 }}>
+        <Box sx={{ width: "100%" }}>
+          <InputLabel htmlFor="title-input" sx={{ fontWeight: "bold" }}>
+            Nama Product
+          </InputLabel>
+          <TextField id="title-input" name="title" value={formData.title} onChange={handleChange} placeholder="Product Name" fullWidth variant="outlined" />
+        </Box>
+        <Box sx={{ width: "100%" }}>
+          <InputLabel htmlFor="brand-input" sx={{ fontWeight: "bold" }}>
+            Brand
+          </InputLabel>
+          <TextField id="brand-input" name="brand" value={formData.brand} onChange={handleChange} placeholder="Brand Name" fullWidth variant="outlined" />
+        </Box>
+      </Box>
+
+      {/* Stock Input */}
+      <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: 2 }}>
+        <Box sx={{ width: "100%" }}>
+          <InputLabel htmlFor="stock-input" sx={{ fontWeight: "bold" }}>
+            Stock
+          </InputLabel>
+          <TextField id="stock-input" name="stock" type="number" value={formData.stock} onChange={handleChange} placeholder="0" fullWidth variant="outlined" inputProps={{ min: 0 }} />
+        </Box>
+      </Box>
+
+      {/* Category & Price */}
+      <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: 2 }}>
+        <Box sx={{ width: "100%" }}>
+          <InputLabel htmlFor="price-input" sx={{ fontWeight: "bold" }}>
+            Category
+          </InputLabel>
+          <FormControl fullWidth>
+            <InputLabel htmlFor="category-input"></InputLabel>
+            <Select id="category-input" name="category" value={formData.category} onChange={handleChange}>
+              <MenuItem value="beauty">Beauty</MenuItem>
+              <MenuItem value="fragrances">Fragrances</MenuItem>
+              <MenuItem value="furniture">Furniture</MenuItem>
+              <MenuItem value="groceries">Groceries</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+        <Box sx={{ width: "100%" }}>
+          <InputLabel htmlFor="price-input" sx={{ fontWeight: "bold" }}>
+            Price
+          </InputLabel>
+          <TextField id="price-input" name="price" type="number" value={formData.price} onChange={handleChange} placeholder="Enter price" fullWidth variant="outlined" inputProps={{ min: 0, step: 0.01 }} />
+        </Box>
+      </Box>
+
+      {/* Buttons */}
+      <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2, mt: 4 }}>
+        <Button component={Link} to="/products" variant="outlined" color="primary" sx={{ fontWeight: "bold" }}>
+          Cancel
+        </Button>
+        <Button type="submit" variant="contained" color="primary" sx={{ fontWeight: "bold" }}>
+          {formData.id ? "Update Product" : "Save Product"}
+        </Button>
+      </Box>
+    </Box>
   );
 }

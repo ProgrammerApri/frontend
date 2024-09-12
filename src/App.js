@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Customer from "./pages/page/customer/Customer";
 import Home from "./pages/page/home/Home";
 import List from "./pages/page/list/List";
 import New from "./pages/page/new/New";
@@ -11,10 +10,10 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
-          <Route path="/" element={<Customer />} />
+          <Route path="/" element={<Single />} />
 
           <Route path="/produk-create" element={<Single />} />
-          <Route path="product/:id/edit" element={<New />} />
+          <Route path="produk-edit/:id/edit" element={<New />} />
 
           <Route path="/products">
             <Route index element={<List />} />
