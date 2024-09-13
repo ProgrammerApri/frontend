@@ -1,6 +1,6 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -10,49 +10,49 @@ import {
   InputLabel,
   FormControl,
   Alert,
-} from "@mui/material";
+} from '@mui/material';
 
 export default function FormProd({ product }) {
   const [formData, setFormData] = useState({
-    id: "",
-    title: "",
-    category: "",
-    price: "",
-    discountPercentage: "",
-    stock: "",
-    tags: "",
-    brand: "",
-    sku: "",
-    weight: "",
-    warrantyInformation: "",
-    shippingInformation: "",
-    availabilityStatus: "",
-    returnPolicy: "",
-    minimumOrderQuantity: "",
+    id: '',
+    title: '',
+    category: '',
+    price: '',
+    discountPercentage: '',
+    stock: '',
+    tags: '',
+    brand: '',
+    sku: '',
+    weight: '',
+    warrantyInformation: '',
+    shippingInformation: '',
+    availabilityStatus: '',
+    returnPolicy: '',
+    minimumOrderQuantity: '',
   });
 
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
     if (product) {
       setFormData({
-        id: product.id || "",
-        title: product.title || "",
-        category: product.category || "",
-        price: product.price || "",
-        discountPercentage: product.discountPercentage || "",
-        stock: product.stock || "",
-        tags: product.tags || "",
-        brand: product.brand || "",
-        sku: product.sku || "",
-        weight: product.weight || "",
-        warrantyInformation: product.warrantyInformation || "",
-        shippingInformation: product.shippingInformation || "",
-        availabilityStatus: product.availabilityStatus || "",
-        returnPolicy: product.returnPolicy || "",
-        minimumOrderQuantity: product.minimumOrderQuantity || "",
+        id: product.id || '',
+        title: product.title || '',
+        category: product.category || '',
+        price: product.price || '',
+        discountPercentage: product.discountPercentage || '',
+        stock: product.stock || '',
+        tags: product.tags || '',
+        brand: product.brand || '',
+        sku: product.sku || '',
+        weight: product.weight || '',
+        warrantyInformation: product.warrantyInformation || '',
+        shippingInformation: product.shippingInformation || '',
+        availabilityStatus: product.availabilityStatus || '',
+        returnPolicy: product.returnPolicy || '',
+        minimumOrderQuantity: product.minimumOrderQuantity || '',
       });
     }
   }, [product]);
@@ -60,10 +60,10 @@ export default function FormProd({ product }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-
+    
     // Clear error message when user starts typing
-    if (name === "title" && value) {
-      setErrorMessage("");
+    if (name === 'title' && value) {
+      setErrorMessage('');
     }
   };
 
@@ -72,7 +72,7 @@ export default function FormProd({ product }) {
 
     // Validation: Check if title is empty
     if (!formData.title) {
-      setErrorMessage("Nama Product tidak boleh kosong.");
+      setErrorMessage('Nama Product tidak boleh kosong.');
       return;
     }
 
@@ -89,24 +89,36 @@ export default function FormProd({ product }) {
       } else {
         // Use POST method to add a new product
         response = await axios.post(
-          "https://dummyjson.com/products/add",
-          formData
+          'https://dummyjson.com/products/add',
+          formData,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
         );
-        console.log("New product added: ", response.data);
-        setSuccessMessage("Product berhasil ditambahkan!");
       }
 
-      setErrorMessage("");
+      // Log the response to see if the request was successful
+      console.log('Response status:', response.status);
+      console.log('Response data:', response.data);
+
+      // Check if the response status is OK and contains the new product ID
+      if (response.status === 200 || response.status === 201) {
+        setSuccessMessage(formData.id ? 'Product berhasil diperbarui!' : 'Product berhasil ditambahkan!');
+        setErrorMessage('');
+      } else {
+        setErrorMessage('Penambahan produk gagal. Coba lagi.');
+      }
 
       // Delay navigation for 2 seconds to show success message
       setTimeout(() => {
-        navigate("/products");
+        navigate('/products');
       }, 2000);
     } catch (error) {
-      console.error("Error details:", error); // Log error details for debugging
-      setErrorMessage(
-        "Terjadi kesalahan saat menambahkan atau memperbarui produk."
-      );
+      // Log error details to diagnose issues
+      console.error('Error details:', error.response ? error.response.data : error.message);
+      setErrorMessage('Terjadi kesalahan saat menambahkan atau memperbarui produk.');
     }
   };
 
@@ -114,13 +126,14 @@ export default function FormProd({ product }) {
     <Box
       component="form"
       sx={{
-        width: { lg: "66%" },
-        display: "flex",
-        flexDirection: "column",
+        width: { lg: '66%' },
+        display: 'flex',
+        flexDirection: 'column',
         gap: 2,
         ml: { xs: 1, md: 2 },
       }}
-      onSubmit={submitData}>
+      onSubmit={submitData}
+    >
       {successMessage && (
         <Alert severity="success" sx={{ mb: 2 }}>
           {successMessage}
@@ -135,12 +148,13 @@ export default function FormProd({ product }) {
       {/* SKU Input */}
       <Box
         sx={{
-          display: "flex",
-          flexDirection: { xs: "column", md: "row" },
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
           gap: 2,
-        }}>
-        <Box sx={{ width: "100%" }}>
-          <InputLabel htmlFor="sku-input" sx={{ fontWeight: "bold" }}>
+        }}
+      >
+        <Box sx={{ width: '100%' }}>
+          <InputLabel htmlFor="sku-input" sx={{ fontWeight: 'bold' }}>
             SKU
           </InputLabel>
           <TextField
@@ -158,12 +172,13 @@ export default function FormProd({ product }) {
       {/* Product Name & Brand */}
       <Box
         sx={{
-          display: "flex",
-          flexDirection: { xs: "column", md: "row" },
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
           gap: 2,
-        }}>
-        <Box sx={{ width: "100%" }}>
-          <InputLabel htmlFor="title-input" sx={{ fontWeight: "bold" }}>
+        }}
+      >
+        <Box sx={{ width: '100%' }}>
+          <InputLabel htmlFor="title-input" sx={{ fontWeight: 'bold' }}>
             Nama Product
           </InputLabel>
           <TextField
@@ -176,8 +191,8 @@ export default function FormProd({ product }) {
             variant="outlined"
           />
         </Box>
-        <Box sx={{ width: "100%" }}>
-          <InputLabel htmlFor="brand-input" sx={{ fontWeight: "bold" }}>
+        <Box sx={{ width: '100%' }}>
+          <InputLabel htmlFor="brand-input" sx={{ fontWeight: 'bold' }}>
             Brand
           </InputLabel>
           <TextField
@@ -195,12 +210,13 @@ export default function FormProd({ product }) {
       {/* Stock Input */}
       <Box
         sx={{
-          display: "flex",
-          flexDirection: { xs: "column", md: "row" },
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
           gap: 2,
-        }}>
-        <Box sx={{ width: "100%" }}>
-          <InputLabel htmlFor="stock-input" sx={{ fontWeight: "bold" }}>
+        }}
+      >
+        <Box sx={{ width: '100%' }}>
+          <InputLabel htmlFor="stock-input" sx={{ fontWeight: 'bold' }}>
             Stock
           </InputLabel>
           <TextField
@@ -220,12 +236,13 @@ export default function FormProd({ product }) {
       {/* Category & Price */}
       <Box
         sx={{
-          display: "flex",
-          flexDirection: { xs: "column", md: "row" },
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
           gap: 2,
-        }}>
-        <Box sx={{ width: "100%" }}>
-          <InputLabel htmlFor="price-input" sx={{ fontWeight: "bold" }}>
+        }}
+      >
+        <Box sx={{ width: '100%' }}>
+          <InputLabel htmlFor="category-input" sx={{ fontWeight: 'bold' }}>
             Category
           </InputLabel>
           <FormControl fullWidth>
@@ -234,7 +251,8 @@ export default function FormProd({ product }) {
               id="category-input"
               name="category"
               value={formData.category}
-              onChange={handleChange}>
+              onChange={handleChange}
+            >
               <MenuItem value="beauty">Beauty</MenuItem>
               <MenuItem value="fragrances">Fragrances</MenuItem>
               <MenuItem value="furniture">Furniture</MenuItem>
@@ -242,8 +260,8 @@ export default function FormProd({ product }) {
             </Select>
           </FormControl>
         </Box>
-        <Box sx={{ width: "100%" }}>
-          <InputLabel htmlFor="price-input" sx={{ fontWeight: "bold" }}>
+        <Box sx={{ width: '100%' }}>
+          <InputLabel htmlFor="price-input" sx={{ fontWeight: 'bold' }}>
             Price
           </InputLabel>
           <TextField
@@ -261,21 +279,26 @@ export default function FormProd({ product }) {
       </Box>
 
       {/* Buttons */}
-      <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2, mt: 4 }}>
-        <Button
-          component={Link}
-          to="/products"
-          variant="outlined"
-          color="primary"
-          sx={{ fontWeight: "bold" }}>
-          Cancel
-        </Button>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          gap: 2,
+        }}
+      >
         <Button
           type="submit"
           variant="contained"
           color="primary"
-          sx={{ fontWeight: "bold" }}>
-          {formData.id ? "Update Product" : "Save Product"}
+        >
+          {formData.id ? 'Update Product' : 'Add Product'}
+        </Button>
+        <Button
+          component={Link}
+          to="/products"
+          variant="outlined"
+        >
+          Cancel
         </Button>
       </Box>
     </Box>
