@@ -1,9 +1,18 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Box, Button, TextField, Select, MenuItem, InputLabel, FormControl, Alert } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  Alert,
+} from "@mui/material";
 
-export default function FormProduct({ product }) {
+export default function FormProd({ product }) {
   const [formData, setFormData] = useState({
     id: "",
     title: "",
@@ -68,16 +77,22 @@ export default function FormProduct({ product }) {
     }
 
     try {
-      // Check if formData.id exists to decide between POST or PUT
+      let response;
       if (formData.id) {
         // Use PUT method to update the product
-        const { data } = await axios.put(`https://dummyjson.com/products/${formData.id}`, formData);
-        console.log("Product updated: ", data);
+        response = await axios.patch(
+          `https://dummyjson.com/products/${formData.id}`, 
+          JSON.stringify(formData)
+        );
+
         setSuccessMessage("Product berhasil diupdate!");
       } else {
         // Use POST method to add a new product
-        const { data } = await axios.post("https://dummyjson.com/products/add", formData);
-        console.log("New product added: ", data);
+        response = await axios.post(
+          "https://dummyjson.com/products/add",
+          formData
+        );
+        console.log("New product added: ", response.data);
         setSuccessMessage("Product berhasil ditambahkan!");
       }
 
@@ -88,12 +103,24 @@ export default function FormProduct({ product }) {
         navigate("/products");
       }, 2000);
     } catch (error) {
-      setErrorMessage("Terjadi kesalahan saat menambahkan atau memperbarui produk.");
+      console.error("Error details:", error); // Log error details for debugging
+      setErrorMessage(
+        "Terjadi kesalahan saat menambahkan atau memperbarui produk."
+      );
     }
   };
 
   return (
-    <Box component="form" sx={{ width: { lg: "66%" }, display: "flex", flexDirection: "column", gap: 2, ml: { xs: 1, md: 2 } }} onSubmit={submitData}>
+    <Box
+      component="form"
+      sx={{
+        width: { lg: "66%" },
+        display: "flex",
+        flexDirection: "column",
+        gap: 2,
+        ml: { xs: 1, md: 2 },
+      }}
+      onSubmit={submitData}>
       {successMessage && (
         <Alert severity="success" sx={{ mb: 2 }}>
           {successMessage}
@@ -106,50 +133,108 @@ export default function FormProduct({ product }) {
       )}
 
       {/* SKU Input */}
-      <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          gap: 2,
+        }}>
         <Box sx={{ width: "100%" }}>
           <InputLabel htmlFor="sku-input" sx={{ fontWeight: "bold" }}>
             SKU
           </InputLabel>
-          <TextField id="sku-input" name="sku" value={formData.sku} onChange={handleChange} placeholder="RCH45Q1A" fullWidth variant="outlined" />
+          <TextField
+            id="sku-input"
+            name="sku"
+            value={formData.sku}
+            onChange={handleChange}
+            placeholder="RCH45Q1A"
+            fullWidth
+            variant="outlined"
+          />
         </Box>
       </Box>
 
       {/* Product Name & Brand */}
-      <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          gap: 2,
+        }}>
         <Box sx={{ width: "100%" }}>
           <InputLabel htmlFor="title-input" sx={{ fontWeight: "bold" }}>
             Nama Product
           </InputLabel>
-          <TextField id="title-input" name="title" value={formData.title} onChange={handleChange} placeholder="Product Name" fullWidth variant="outlined" />
+          <TextField
+            id="title-input"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            placeholder="Product Name"
+            fullWidth
+            variant="outlined"
+          />
         </Box>
         <Box sx={{ width: "100%" }}>
           <InputLabel htmlFor="brand-input" sx={{ fontWeight: "bold" }}>
             Brand
           </InputLabel>
-          <TextField id="brand-input" name="brand" value={formData.brand} onChange={handleChange} placeholder="Brand Name" fullWidth variant="outlined" />
+          <TextField
+            id="brand-input"
+            name="brand"
+            value={formData.brand}
+            onChange={handleChange}
+            placeholder="Brand Name"
+            fullWidth
+            variant="outlined"
+          />
         </Box>
       </Box>
 
       {/* Stock Input */}
-      <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          gap: 2,
+        }}>
         <Box sx={{ width: "100%" }}>
           <InputLabel htmlFor="stock-input" sx={{ fontWeight: "bold" }}>
             Stock
           </InputLabel>
-          <TextField id="stock-input" name="stock" type="number" value={formData.stock} onChange={handleChange} placeholder="0" fullWidth variant="outlined" inputProps={{ min: 0 }} />
+          <TextField
+            id="stock-input"
+            name="stock"
+            type="number"
+            value={formData.stock}
+            onChange={handleChange}
+            placeholder="0"
+            fullWidth
+            variant="outlined"
+            inputProps={{ min: 0 }}
+          />
         </Box>
       </Box>
 
       {/* Category & Price */}
-      <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          gap: 2,
+        }}>
         <Box sx={{ width: "100%" }}>
           <InputLabel htmlFor="price-input" sx={{ fontWeight: "bold" }}>
             Category
           </InputLabel>
           <FormControl fullWidth>
             <InputLabel htmlFor="category-input"></InputLabel>
-            <Select id="category-input" name="category" value={formData.category} onChange={handleChange}>
+            <Select
+              id="category-input"
+              name="category"
+              value={formData.category}
+              onChange={handleChange}>
               <MenuItem value="beauty">Beauty</MenuItem>
               <MenuItem value="fragrances">Fragrances</MenuItem>
               <MenuItem value="furniture">Furniture</MenuItem>
@@ -161,16 +246,35 @@ export default function FormProduct({ product }) {
           <InputLabel htmlFor="price-input" sx={{ fontWeight: "bold" }}>
             Price
           </InputLabel>
-          <TextField id="price-input" name="price" type="number" value={formData.price} onChange={handleChange} placeholder="Enter price" fullWidth variant="outlined" inputProps={{ min: 0, step: 0.01 }} />
+          <TextField
+            id="price-input"
+            name="price"
+            type="number"
+            value={formData.price}
+            onChange={handleChange}
+            placeholder="Enter price"
+            fullWidth
+            variant="outlined"
+            inputProps={{ min: 0, step: 0.01 }}
+          />
         </Box>
       </Box>
 
       {/* Buttons */}
       <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2, mt: 4 }}>
-        <Button component={Link} to="/products" variant="outlined" color="primary" sx={{ fontWeight: "bold" }}>
+        <Button
+          component={Link}
+          to="/products"
+          variant="outlined"
+          color="primary"
+          sx={{ fontWeight: "bold" }}>
           Cancel
         </Button>
-        <Button type="submit" variant="contained" color="primary" sx={{ fontWeight: "bold" }}>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          sx={{ fontWeight: "bold" }}>
           {formData.id ? "Update Product" : "Save Product"}
         </Button>
       </Box>

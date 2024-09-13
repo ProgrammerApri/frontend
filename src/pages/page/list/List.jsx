@@ -2,7 +2,7 @@ import React from "react";
 import Navbar from "../../../components/navigation/navbar/Navbar";
 import Sidebar from "../../../components/navigation/sidebar/Sidebar";
 import Footer from "../../../components/navigation/footer/Footer";
-import Example from "../../compon/ProductList";
+import Example from "../../tableproduk/ProductList";
 
 const List = () => {
   return (

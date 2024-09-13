@@ -12,9 +12,9 @@ function Navbar() {
   return (
     <div className="navbar">
       <div className="wrapper">
-        <div className="search">
-          <input type="text" placeholder="search..." />
-          <SearchIcon />
+        <div >
+          {/* <input type="text" placeholder="search..." />
+          <SearchIcon /> */}
         </div>
         <div className="items">
           <div className="item">

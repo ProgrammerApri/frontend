@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Navbar from "../../../components/navigation/navbar/Navbar";
 import Sidebar from "../../../components/navigation/sidebar/Sidebar";
 import "./new.scss";
-import FormProduct from "../User/FormUser";
+import FormProduct from "../FormProduct/FormProd";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
@@ -12,12 +12,12 @@ const New = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      axios.get(`https://dummyjson.com/products/${id}`).then(({data}) => {
-        setProducts(data)
-      })
+      axios.get(`https://dummyjson.com/products/${id}`).then(({ data }) => {
+        setProducts(data);
+      });
     };
 
-    fetchData(); // Call the fetch function
+    fetchData();
   }, []);
 
   return (
@@ -25,8 +25,17 @@ const New = () => {
       <Sidebar />
       <div className="homeContainer">
         <Navbar />
-        <h1 className="text-2xl">Edit Product</h1>
-        <FormProduct product={products}/>
+        <h1
+          style={{
+            marginLeft: "20px",
+            marginBottom: "16px",
+            marginTop: "20px",
+          }}
+          className="text-2xl">
+          Edit Product
+        </h1>
+
+        <FormProduct product={products} />
       </div>
     </div>
   );
